@@ -6,6 +6,7 @@ const { User } = require("../models");
 const userCount = async () =>
   User.aggregate()
     // Your code here
+    .count("numberOfUsers")
     .then((numberOfUsers) => numberOfUsers.length);
 
 module.exports = {

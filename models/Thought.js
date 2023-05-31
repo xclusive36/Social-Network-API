@@ -1,5 +1,4 @@
 const { Schema, Types } = require("mongoose");
-const dateFormat = require("../utils/dateFormat");
 const reactionSchema = require("./Reaction");
 
 const thoughtSchema = new Schema(
@@ -17,7 +16,11 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      get: (createdAtVal) => dateFormat(createdAtVal),
+      get: (createdAtVal) => {
+        // Format date as MM/DD/YYYY
+        return createdAtVal.toLocaleDateString();
+      },
+      // get: (createdAtVal) => dateFormat(createdAtVal),
     },
     username: {
       type: String,
