@@ -17,7 +17,7 @@ const userSchema = new Schema(
       match: [/.+@.+\..+/],
     },
     thoughts: [thoughtSchema],
-    friends: [userSchema],
+    friends: [],
   },
   {
     toJSON: {
@@ -25,6 +25,11 @@ const userSchema = new Schema(
     },
   }
 );
+
+// Add userSchema to friends array
+userSchema.add({
+  friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
+});
 
 // Virtual to count friends
 userSchema.virtual("friendCount").get(function () {
