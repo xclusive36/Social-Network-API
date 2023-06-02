@@ -11,6 +11,9 @@ const {
   getSingleThought,
   addReaction,
   removeReaction,
+  addFriend,
+  removeFriend,
+
 } = require('../../controllers/userController');
 
 router.route('/', (req, res) => {
@@ -43,5 +46,11 @@ router.route('/:userId/thoughts/:thoughtId/reactions').post(addReaction);
 
 // /api/users/:userId/thoughts/:thoughtId/reactions/:reactionId
 router.route('/:userId/thoughts/:thoughtId/reactions/:reactionId').delete(removeReaction);
+
+// /api/users/:userId/friends/:friendId
+router.route('/:userId/friends/:friendId').post(addFriend);
+
+// /api/users/:userId/friends/:friendId
+router.route('/:userId/friends/:friendId').delete(removeFriend);
 
 module.exports = router;
