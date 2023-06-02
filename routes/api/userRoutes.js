@@ -47,8 +47,8 @@ router.route('/:userId/thoughts/:thoughtId/reactions').post(addReaction);
 // /api/users/:userId/thoughts/:thoughtId/reactions/:reactionId
 router.route('/:userId/thoughts/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
-// /api/users/:userId/friends/:friendId
-router.route('/:userId/friends/:friendId').post(addFriend);
+// /api/users/:userId/friends/
+router.route('/:userId/friends').post(addFriend);
 
 // /api/users/:userId/friends/:friendId
 router.route('/:userId/friends/:friendId').delete(removeFriend);
