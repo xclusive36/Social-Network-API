@@ -10,6 +10,7 @@ const userCount = async () =>
     .then((numberOfUsers) => numberOfUsers.length);
 
 module.exports = {
+  // USERS _________________________________________________________________
   // Get all users
   getUsers(req, res) {
     User.find()
@@ -71,7 +72,7 @@ module.exports = {
         res.status(500).json(err);
       });
   },
-
+  // THOUGHTS _________________________________________________________________
   // Add a thought to a user
   addThought(req, res) {
     console.log("You are adding an thought");
@@ -106,7 +107,6 @@ module.exports = {
   getSingleThought(req, res) {
     User.findOne(
       { _id: req.params.userId },
-      // { thoughts: { $elemMatch: { thoughtId: req.params.thoughtId } } }
       { thoughts: { $elemMatch: { _id: req.params.thoughtId } } }
     )
       .select("-__v")
@@ -137,13 +137,32 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+  // REACTIONS _________________________________________________________________
   // Add a reaction to a thought
   addReaction(req, res) {
     console.log("You are adding an reaction");
     console.log(req.body);
     User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $addToSet: { reactions: req.body } },
+      { _id: req.params.userId, "thoughts._id": req.params.thoughtId },
+      { $addToSet: { "thoughts.$.reactions": req.body } },
+      { runValidators: true, new: true }
+    )
+      .then((user) => {
+        !user
+          ? res.status(404).json({ message: "No user found with that ID :(" })
+          : res.json(user);
+      })
+      .catch((err) => res.status(500).json(err));
+  },
+  // Remove a reaction from a thought
+  removeReaction(req, res) {
+    User.findOneAndUpdate(
+      {
+        _id: req.params.userId,
+        "thoughts._id": req.params.thoughtId,
+        "thoughts.reactions._id": req.params.reactionId,
+      },
+      { $pull: { "thoughts.$.reactions": { _id: req.params.reactionId } } },
       { runValidators: true, new: true }
     )
       .then((user) =>
@@ -153,11 +172,26 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Remove a reaction from a thought
-  removeReaction(req, res) {
+  // FRIENDS _________________________________________________________________
+  // Add a friend to a user
+  addFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { $addToSet: { friends: req.body } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user found with that ID :(" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // Remove a friend from a user
+  removeFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     )
       .then((user) =>

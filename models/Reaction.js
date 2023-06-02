@@ -18,7 +18,11 @@ const reactionSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      get: (createdAtVal) => dateFormat(createdAtVal),
+      get: (createdAtVal) => {
+        // Format date as MM/DD/YYYY
+        return createdAtVal.toLocaleDateString();
+      },
+      // get: (createdAtVal) => dateFormat(createdAtVal),
     }
   },
   {
