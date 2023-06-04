@@ -111,6 +111,24 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err)); // If there is an error, return a 500 error
   },
+  // Get all thoughts by a user
+  getAllThoughts(req, res) {
+    User.findOne({ _id: req.params.userId }) // Find a user with the specified ID
+      .select("-__v") // Don't return the __v field
+      .populate("thoughts") // Populate the thoughts field
+      .lean() // Return a plain JS object instead of a Mongoose object
+      .then(
+        async (
+          user // Then asynchronously run the following code on the user
+        ) => {
+          const thoughts = user.thoughts;
+          !user // If there is no user with that ID, return a 404 error
+            ? res.status(404).json({ message: "No user with that ID" })
+            : res.json({ thoughts }); // Otherwise, return the thoughts
+        }
+      )
+      .catch((err) => res.status(500).json(err)); // If there is an error, return a 500 error
+  },
   // Get a single thought
   getSingleThought(req, res) {
     User.findOne(
@@ -120,14 +138,13 @@ module.exports = {
     )
       .select("-__v") // Don't return the __v field
       .lean() // Return a plain JS object instead of a Mongoose object
-      .then(
-        async (
-          user // Then asynchronously run the following code on the user
-        ) =>
-          !user // If there is no user with that ID, return a 404 error
-            ? res.status(404).json({ message: "No user with that ID" }) // Otherwise, return the user
-            : res.json({ user }) // Otherwise, return the user
-      )
+      .then(async ({ thoughts }) => {
+        const thought = thoughts[0];
+        // user // Then asynchronously run the following code on the user
+        !thoughts // If there is no thought with that ID, return a 404 error
+          ? res.status(404).json({ message: "No thought with that ID" })
+          : res.json({ thought }); // Otherwise, return the thought
+      })
       .catch((err) => res.status(500).json(err)); // If there is an error, return a 500 error
   },
   // Update a thought

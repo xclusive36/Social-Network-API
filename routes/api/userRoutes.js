@@ -10,6 +10,7 @@ const {
   updateThought,
   removeThought,
   getSingleThought,
+  getAllThoughts,
   addReaction,
   removeReaction,
   addFriend,
@@ -24,6 +25,7 @@ router.route("/", (req, res) => {
 router.route("/").get(getUsers).post(createUser); // GET and POST at /api/users
 router.route("/:userId").get(getSingleUser).put(updateUser); // GET one, PUT at /api/users/:userId
 router.route("/:userId").get(getSingleUser).delete(deleteUser); // GET one, DELETE at /api/users/:userId
+router.route("/:userId/thoughts").get(getAllThoughts); // GET all at /api/users/:userId/thoughts
 router.route("/:userId/thoughts").post(addThought); // POST at /api/users/:userId/thoughts
 router.route("/:userId/thoughts/:thoughtId").get(getSingleThought); // GET one at /api/users/:userId/thoughts/:thoughtId
 router
