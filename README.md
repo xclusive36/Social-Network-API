@@ -20,7 +20,7 @@ Social-Network-API is a backend application that allows users to create, update,
 
 ## Video
 
-- [Video]()  
+- [Video](https://drive.google.com/file/d/1VSGDXDomv6UYtXL--j5VKoci0X00vTf3/view)  
   Video of the application in use.
 
 ## Installation
