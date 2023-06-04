@@ -1,5 +1,6 @@
-const router = require('express').Router();
+const router = require("express").Router(); // import the Express router
 const {
+  // import the methods from userController.js
   getUsers,
   getSingleUser,
   createUser,
@@ -13,44 +14,28 @@ const {
   removeReaction,
   addFriend,
   removeFriend,
+} = require("../../controllers/userController");
 
-} = require('../../controllers/userController');
-
-router.route('/', (req, res) => {
-  res.send('Hello World!');
+router.route("/", (req, res) => {
+  // GET route to ensure the server is working
+  res.send("Hello World!"); // send a message to the client
 });
 
-// /api/users
-router.route('/').get(getUsers).post(createUser);
+router.route("/").get(getUsers).post(createUser); // GET and POST at /api/users
+router.route("/:userId").get(getSingleUser).put(updateUser); // GET one, PUT at /api/users/:userId
+router.route("/:userId").get(getSingleUser).delete(deleteUser); // GET one, DELETE at /api/users/:userId
+router.route("/:userId/thoughts").post(addThought); // POST at /api/users/:userId/thoughts
+router.route("/:userId/thoughts/:thoughtId").get(getSingleThought); // GET one at /api/users/:userId/thoughts/:thoughtId
+router
+  .route("/:userId/thoughts/:thoughtId")
+  .get(getSingleThought)
+  .put(updateThought); // GET one, PUT at /api/users/:userId/thoughts/:thoughtId
+router.route("/:userId/thoughts/:thoughtId").delete(removeThought); // DELETE at /api/users/:userId/thoughts/:thoughtId
+router.route("/:userId/thoughts/:thoughtId/reactions").post(addReaction); // POST at /api/users/:userId/thoughts/:thoughtId/reactions
+router
+  .route("/:userId/thoughts/:thoughtId/reactions/:reactionId")
+  .delete(removeReaction); // DELETE at /api/users/:userId/thoughts/:thoughtId/reactions/:reactionId
+router.route("/:userId/friends").post(addFriend); // POST at /api/users/:userId/friends
+router.route("/:userId/friends/:friendId").delete(removeFriend); // DELETE at /api/users/:userId/friends/:friendId
 
-// /api/users/:userId
-router.route('/:userId').get(getSingleUser).put(updateUser);
-
-// /api/users/:userId
-router.route('/:userId').get(getSingleUser).delete(deleteUser);
-
-// /api/users/:userId/thoughts
-router.route('/:userId/thoughts').post(addThought);
-
-// /api/users/:userId/thoughts/:thoughtId
-router.route('/:userId/thoughts/:thoughtId').get(getSingleThought);
-
-// /api/users/:userId/thoughts/:thoughtId
-router.route('/:userId/thoughts/:thoughtId').get(getSingleThought).put(updateThought);
-
-// /api/users/:userId/thoughts/:thoughtId
-router.route('/:userId/thoughts/:thoughtId').delete(removeThought);
-
-// /api/users/:userId/thoughts/:thoughtId/reactions
-router.route('/:userId/thoughts/:thoughtId/reactions').post(addReaction);
-
-// /api/users/:userId/thoughts/:thoughtId/reactions/:reactionId
-router.route('/:userId/thoughts/:thoughtId/reactions/:reactionId').delete(removeReaction);
-
-// /api/users/:userId/friends/
-router.route('/:userId/friends').post(addFriend);
-
-// /api/users/:userId/friends/:friendId
-router.route('/:userId/friends/:friendId').delete(removeFriend);
-
-module.exports = router;
+module.exports = router; // export the router
